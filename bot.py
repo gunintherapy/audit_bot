@@ -1,6 +1,5 @@
 import asyncio
 from aiogram import Bot, Dispatcher, types, F
-from aiogram.filters import Command
 from aiogram.filters.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardButton
@@ -96,23 +95,12 @@ async def ask_question(message: types.Message | types.CallbackQuery, q_index: in
     else:
         await message.answer(q_data["question"], reply_markup=builder.as_markup())
 
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-
-@dp.message(Command("start"))
+@dp.message(F.text == "/start")
 async def cmd_start(message: types.Message, state: FSMContext):
     await state.clear()
-
-    # Кнопка внизу (НЕ пропадает)
-    reply_kb = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="Начать тест")]],
-        resize_keyboard=True
-    )
-
-    await message.answer(
-        WELCOME_TEXT,
-        reply_markup=reply_kb,
-        parse_mode="HTML"
-    )
+    builder = InlineKeyboardBuilder()
+    builder.add(InlineKeyboardButton(text="Начать тест", callback_data="start_test"))
+    await message.answer(WELCOME_TEXT, reply_markup=builder.as_markup())
 
 
 
