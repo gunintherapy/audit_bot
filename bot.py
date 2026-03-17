@@ -96,12 +96,29 @@ async def ask_question(message: types.Message | types.CallbackQuery, q_index: in
     else:
         await message.answer(q_data["question"], reply_markup=builder.as_markup())
 
-@dp.message(F.text == "/start")
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
+@dp.message(Command("start"))
 async def cmd_start(message: types.Message, state: FSMContext):
     await state.clear()
-    builder = InlineKeyboardBuilder()
-    builder.add(InlineKeyboardButton(text="Начать тест", callback_data="start_test"))
-    await message.answer(WELCOME_TEXT, reply_markup=builder.as_markup())
+
+    # Кнопка внизу (НЕ пропадает)
+    reply_kb = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="Начать тест")]],
+        resize_keyboard=True
+    )
+
+    await message.answer(
+        WELCOME_TEXT,
+        reply_markup=reply_kb,
+        parse_mode="HTML"
+    )
+
+
+@dp.message(F.text == "Начать тест")
+async def start_from_button(message: types.Message, state: FSMContext):
+    await state.update_data(current_q=0, total_score=0)
+    await ask_question(message, 0)
 
 @dp.callback_query(F.data == "start_test")
 async def start_test(callback: types.CallbackQuery, state: FSMContext):
