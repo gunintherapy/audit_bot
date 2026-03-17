@@ -115,10 +115,6 @@ async def cmd_start(message: types.Message, state: FSMContext):
     )
 
 
-@dp.message(F.text == "Начать тест")
-async def start_from_button(message: types.Message, state: FSMContext):
-    await state.update_data(current_q=0, total_score=0)
-    await ask_question(message, 0)
 
 @dp.callback_query(F.data == "start_test")
 async def start_test(callback: types.CallbackQuery, state: FSMContext):
