@@ -1,10 +1,10 @@
 import asyncio
 from aiogram import Bot, Dispatcher, types, F
+from aiogram.filters import Command
 from aiogram.filters.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-
 TOKEN = "8771966211:AAHRyxKV4CliVxFp9EZ-_AgcRYrZk0zxLSw"
 
 bot = Bot(TOKEN, parse_mode="HTML")
